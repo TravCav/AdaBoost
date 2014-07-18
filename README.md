@@ -1,0 +1,4 @@
+AdaBoost
+========
+
+Adaptive Boost Algorithm
