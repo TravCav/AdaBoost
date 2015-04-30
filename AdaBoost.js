@@ -1,4 +1,4 @@
-(function () {
+(function() {
 	'use strict';
 
 	var trainingData = [
@@ -14,7 +14,7 @@
 		["Coughing", "Female", "Adult", "Admitted"]
 	];
 
-	var Predict = new MakePredictor(trainingData, "Discharged");
+	var Predict = MakePredictor(trainingData, "Discharged");
 
 	var vote = Predict(["Coughing", "Male", "Child"]);
 	console.log("The final vote is " + vote);
@@ -28,7 +28,7 @@
 	console.log("The final vote is " + vote);
 	console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
 
-	vote = Predict(["Headache","","Child"]);
+	vote = Predict(["Headache", "", "Child"]);
 	console.log("The final vote is " + vote);
 	console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
 
@@ -52,7 +52,7 @@ You'll be given back a function that you can use to pass in "questions"
 */
 function MakePredictor(rawTrain, positiveOutcome) {
 	var learners = TrainData(rawTrain, positiveOutcome);
-	
+
 	return function MakePrediction(testData) {
 		console.log('');
 		// loop through each learner to see if it's needed.
@@ -65,10 +65,10 @@ function MakePredictor(rawTrain, positiveOutcome) {
 				console.log(learner.desc + " predicted " + learner.predicted + " and had an weight of " + learner.alpha);
 			}
 		};
-		
+
 		return accumulatedVote;
-	}	
-		
+	}
+
 	function TrainData(rawTrain, positiveOutcome) {
 
 		// Generate a values matrix
@@ -86,7 +86,7 @@ function MakePredictor(rawTrain, positiveOutcome) {
 			}
 		}
 
-		
+
 		console.log('Value matrix');
 		console.log(values);
 
@@ -99,14 +99,14 @@ function MakePredictor(rawTrain, positiveOutcome) {
 		for (var featureIndex = 0, valueCount = values.length; featureIndex < valueCount - 1; featureIndex++) {
 			for (var valueIndex = 0, featureCount = values[featureIndex].length; valueIndex < featureCount; valueIndex++) {
 				var currentValue = values[featureIndex][valueIndex];
-				
+
 				// find how often each value occurs and what it's outcome was
 				// return whether the value resulted more in a Discharged or Admitted
 				// create a learner and add it to list or learners. Don't add if we couldn't figure out a Discharged or Admitted.
 				var plusOne = 0,
-				minusOne = 0,
-				relevant = 0,
-				predicted = 0;
+					minusOne = 0,
+					relevant = 0,
+					predicted = 0;
 
 				for (var dataRow = 0; dataRow < dataRows; dataRow++) {
 					if (rawTrain[dataRow][featureIndex] === currentValue) {
@@ -115,32 +115,31 @@ function MakePredictor(rawTrain, positiveOutcome) {
 					}
 				};
 
-				
+
 				if (relevant != 0 && plusOne != minusOne) {
 					// which one had more?
 					predicted = (plusOne > minusOne) ? 1 : -1;
-					var err = 0;
-					var correct = 0;
 					var epsilon = 0;
 					if (predicted === 1) {
 						epsilon = minusOne * (1 / dataRows);
-					} else {
+					}
+					else {
 						epsilon = plusOne * (1 / dataRows);
 					}
 
 					learners[learnerCount++] = new Learner({
-							desc : values[featureIndex][valueIndex],
-							feature : featureIndex,
-							predicted : predicted,
-							epsilon : epsilon,
-						});
+						desc: values[featureIndex][valueIndex],
+						feature: featureIndex,
+						predicted: predicted,
+						epsilon: epsilon,
+					});
 				}
 			};
 		};
 
 		console.log('Learners');
 		console.log(learners);
-		
+
 		var trainWeights = [dataRows];
 		var lastColumn = rawTrain[0].length - 1;
 
@@ -161,7 +160,8 @@ function MakePredictor(rawTrain, positiveOutcome) {
 			// when all is said and done, assign the epsilon the accumulated training weight.
 			// lather, rinse, repeat for the next learner.
 			for (var updateIndex = 0; updateIndex < learnerCount; updateIndex++) {
-				var learner = learners[updateIndex], ep = 0;
+				var learner = learners[updateIndex],
+					ep = 0;
 				for (var i = 0; i < dataRows; i++) {
 					// if this row has the same value as the learner and the prediction is wrong then accumulate the training weight.
 					if (learner.desc === rawTrain[i][learner.feature] && learner.predicted !== (rawTrain[i][lastColumn] === positiveOutcome ? 1 : -1)) {
@@ -188,8 +188,8 @@ function MakePredictor(rawTrain, positiveOutcome) {
 			// assign to something not zero. otherwise we get divide by zero later.  Also, the smaller this number is, the bigger 0 becomes.  (there's probably a better way to explain that)
 			if (lowestEpsilon === 0) {
 				lowestEpsilon = .000001;
-			} 
-			
+			}
+
 			learners[bestLearner].learned = true;
 			var alpha = 0.5 * Math.log((1.0 - lowestEpsilon) / lowestEpsilon); // increases greatly the further epsilon was from .5
 			learners[bestLearner].alpha = alpha;
@@ -214,7 +214,7 @@ function MakePredictor(rawTrain, positiveOutcome) {
 			for (var i = 0; i < dataRows; i++) {
 				trainWeights[i] = trainWeights[i] / weightTotals;
 			};
-			
+
 			console.log('New updated and leveled weights');
 			console.log(trainWeights);
 
