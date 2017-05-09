@@ -5,33 +5,30 @@ Adaptive Boost Algorithm
 
 #Example
 
-var trainingData = [
-    ["Coughing", "Male", "Adult", "Discharged"],
-    ["Coughing", "Female", "Teen", "Discharged"],
-    ["Headache", "Male", "Child", "Discharged"],
-    ["Headache", "Male", "Teen", "Discharged"],
-    ["Hiccups", "Female", "Adult", "Discharged"],
-    ["Sneezing", "Male", "Teen", "Discharged"],
-    ["Sneezing", "Female", "Child", "Admitted"],
-    ["Sneezing", "Male", "Child", "Admitted"],
-    ["Hiccups", "Female", "Teen", "Admitted"],
-    ["Coughing", "Female", "Adult", "Admitted"]
-];
+(function () {
+	'use strict';
 
-var Predict = AdaBoost.MakePredictor(trainingData, "Discharged");
+	var adaBoost = new AdaBoost(trainingData, "Discharged");
 
-var vote = Predict(["Coughing", "Male", "Child"]);
-console.log("The final vote is " + vote);
-console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
+	console.log(adaBoost.trainedLearners);
+	console.log("");
 
-vote = Predict(["Headache", "Female", "Child"]);
-console.log("The final vote is " + vote);
-console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
+	var vote = adaBoost.predict(["Coughing", "Male", "Child"],true);
+	console.log("The final vote is " + vote);
+	console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
+	console.log("");
 
-vote = Predict(["Hiccups", "Female", "Adult"]);
-console.log("The final vote is " + vote);
-console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
+	vote = adaBoost.predict(["Headache", "Female", "Child"]);
+	console.log("The final vote is " + vote); 
+	console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
+	console.log("");
 
-vote = Predict(["Headache", "", "Child"]);
-console.log("The final vote is " + vote);
-console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
+	vote = adaBoost.predict(["Hiccups", "Female", "Adult"]);
+	console.log("The final vote is " + vote);
+	console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
+	console.log("");
+
+	vote = adaBoost.predict(["Headache", "", "Child"]);
+	console.log("The final vote is " + vote);
+	console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
+})();

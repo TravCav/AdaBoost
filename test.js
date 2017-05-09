@@ -4,9 +4,9 @@
  * @param {any} positiveOutcome is the value in the last column you want to predict for. 
  */
 function AdaBoost(rawTrain, positiveOutcome) {
-	
+	'use strict';	
+
 	function Learner(data) {
-		'use strict';
 		var self = this;
 		self.desc = data.desc;
 		self.feature = data.feature;
@@ -19,13 +19,10 @@ function AdaBoost(rawTrain, positiveOutcome) {
 	this.trainedLearners = TrainData(rawTrain, positiveOutcome);
 
 	/**
-	 * 
-	 * 
 	 * @param {any} testData A record without an outcome
 	 * @returns positive number for true, negative number for false
 	 */
 	this.predict = function(testData) {
-		//// console.log('');
 		// loop through each learner to see if it's needed.
 		// if it is then accumulate the predicted * alpha
 		var accumulatedVote = 0;
@@ -33,7 +30,6 @@ function AdaBoost(rawTrain, positiveOutcome) {
 			var learner = this.trainedLearners[i];
 			if (learner.desc === testData[learner.feature]) {
 				accumulatedVote += learner.predicted * learner.alpha;
-				//// console.log(learner.desc + " predicted " + learner.predicted + " and had an weight of " + learner.alpha);
 			}
 		}
 
@@ -41,6 +37,7 @@ function AdaBoost(rawTrain, positiveOutcome) {
 	};
 
 	function TrainData(rawTrain, positiveOutcome) {
+		var i; // for my loops. because javascript scoping and hoisting.
 
 		// Generate a values matrix
 		var values = [];
@@ -56,10 +53,6 @@ function AdaBoost(rawTrain, positiveOutcome) {
 				}
 			}
 		}
-
-
-		//// console.log('Value matrix');
-		//// console.log(values);
 
 		// Make Learners
 		var dataRows = rawTrain.length;
@@ -87,7 +80,7 @@ function AdaBoost(rawTrain, positiveOutcome) {
 				}
 
 
-				if (relevant != 0 && plusOne !== minusOne) {
+				if (relevant !== 0 && plusOne !== minusOne) {
 					// which one had more?
 					predicted = (plusOne > minusOne) ? 1 : -1;
 					var epsilon = 0;
@@ -107,19 +100,14 @@ function AdaBoost(rawTrain, positiveOutcome) {
 			}
 		}
 
-		//// console.log('Learners');
-		//// console.log(learners);
-
 		var trainWeights = [dataRows];
 		var lastColumn = rawTrain[0].length - 1;
 
 		// Initialize starting training weights
-		for (var i = 0, startWeight = 1.0 / dataRows; i < dataRows; i++) {
+		var startWeight = 1.0 / dataRows; 
+		for (i = 0; i < dataRows; i++) {
 			trainWeights[i] = startWeight;
 		}
-
-		//// console.log('Initial train weights');
-		//// console.log(trainWeights);
 
 		// loop for however many learners there are.
 		for (var learnIndex = 0; learnIndex < learnerCount; learnIndex++) {
@@ -132,18 +120,15 @@ function AdaBoost(rawTrain, positiveOutcome) {
 			for (var updateIndex = 0; updateIndex < learnerCount; updateIndex++) {
 				var learner = learners[updateIndex],
 					ep = 0;
-				for (var i = 0; i < dataRows; i++) {
+				for (i = 0; i < dataRows; i++) {
 					// if this row has the same value as the learner and the prediction is wrong then accumulate the training weight.
 					if (learner.desc === rawTrain[i][learner.feature] && learner.predicted !== (rawTrain[i][lastColumn] === positiveOutcome ? 1 : -1)) {
 						ep += trainWeights[i];
 					}
-				};
+				}
 
 				learners[updateIndex].epsilon = ep;
-			};
-
-			//// console.log('Updated Learners');
-			//// console.log(learners);
+			}
 
 			// find best learner. a.k.a. The unused one with the lowest epsilon.
 			var bestLearner = -1;
@@ -153,7 +138,7 @@ function AdaBoost(rawTrain, positiveOutcome) {
 					lowestEpsilon = learners[findIndex].epsilon;
 					bestLearner = findIndex;
 				}
-			};
+			}
 
 			// assign to something not zero. otherwise we get divide by zero later.  Also, the smaller this number is, the bigger 0 becomes.  (there's probably a better way to explain that)
 			if (lowestEpsilon === 0) {
@@ -165,11 +150,9 @@ function AdaBoost(rawTrain, positiveOutcome) {
 			learners[bestLearner].alpha = alpha;
 
 			var bLearner = learners[bestLearner];
-			//// console.log('Found next best Learner and updated its alpha');
-			//// console.log(bLearner);
 
 			// update training weights by finding training data that matches the learner and scale it.
-			for (var i = 0; i < dataRows; i++) {
+			for (i = 0; i < dataRows; i++) {
 				if (bLearner.desc === rawTrain[i][bLearner.feature]) {
 					trainWeights[i] = trainWeights[i] * Math.exp(-alpha * (rawTrain[i][lastColumn] === positiveOutcome ? 1 : -1) * bLearner.predicted);
 				}
@@ -177,16 +160,13 @@ function AdaBoost(rawTrain, positiveOutcome) {
 
 			// total the training weights then divide each weight by total.
 			var weightTotals = 0;
-			for (var i = 0; i < dataRows; i++) {
+			for (i = 0; i < dataRows; i++) {
 				weightTotals += trainWeights[i];
 			}
 
-			for (var i = 0; i < dataRows; i++) {
+			for (i = 0; i < dataRows; i++) {
 				trainWeights[i] = trainWeights[i] / weightTotals;
 			}
-
-			//// console.log('New updated and leveled weights');
-			//// console.log(trainWeights);
 
 			// Do that all over again for the next best learner until they've all been used.
 		}
@@ -214,23 +194,29 @@ function AdaBoost(rawTrain, positiveOutcome) {
 
 	var adaBoost = new AdaBoost(trainingData, "Discharged");
 
-	var vote = adaBoost.predict(["Coughing", "Male", "Child"]);
+	console.log(adaBoost.trainedLearners);
+	console.log("");
+
+	var vote = adaBoost.predict(["Coughing", "Male", "Child"],true);
 	console.log("The final vote is " + vote, (vote == -0.7156340528869896) );
-	//// console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
+	console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
+	console.log("");
 
 	vote = adaBoost.predict(["Headache", "Female", "Child"]);
 	console.log("The final vote is " + vote, (vote == 1.826510427853278)); // 
-	//// console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
+	console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
+	console.log("");
 
 	vote = adaBoost.predict(["Hiccups", "Female", "Adult"]);
 	console.log("The final vote is " + vote, (vote == 0.0407126627958313));
-	//// console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
+	console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
+	console.log("");
 
 	vote = adaBoost.predict(["Headache", "", "Child"]);
 	console.log("The final vote is " + vote, (vote == 2.4140941225257038));
-	//// console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
+	console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
 
-	////console.log(adaBoost.trainedLearners);
+	
 
 	/*
 	The final vote is -0.7156340528869896
