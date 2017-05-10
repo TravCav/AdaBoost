@@ -173,4 +173,15 @@ function AdaBoost(rawTrain, positiveOutcome) {
 	}
 }
 
-module.exports = AdaBoost;
+
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+	module.exports = AdaBoost;
+} else {
+	if (typeof define === 'function' && define.amd) {
+		define([], function () {
+			return AdaBoost;
+		});
+	} else {
+		window.AdaBoost = AdaBoost;
+	}
+}
