@@ -3,10 +3,7 @@ AdaBoost
 
 Adaptive Boost Algorithm
 
-#Example
-
-(function () {
-	'use strict';
+# Example
 
 	var trainingData = [
 		["Coughing", "Male", "Adult", "Discharged"],
@@ -44,4 +41,3 @@ Adaptive Boost Algorithm
 	vote = adaBoost.predict(["Headache", "", "Child"]);
 	console.log("The final vote is " + vote);
 	console.log("The person will most likely be " + (vote > 1 ? "Discharged" : "Admitted"));
-})();
