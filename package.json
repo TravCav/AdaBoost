@@ -1,6 +1,6 @@
 {
   "name": "adaboost",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Adaptive Boosting Algorithm",
   "main": "AdaBoost.js",
   "scripts": {
