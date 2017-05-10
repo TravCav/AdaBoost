@@ -1,0 +1,24 @@
+{
+  "name": "adaboost",
+  "version": "1.0.0",
+  "description": "Adaptive Boosting Algorithm",
+  "main": "AdaBoost.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TravCav/AdaBoost.git"
+  },
+  "keywords": [
+    "AdaBoost",
+    "Boosting",
+    "ml"
+  ],
+  "author": "TravCav",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TravCav/AdaBoost/issues"
+  },
+  "homepage": "https://github.com/TravCav/AdaBoost#readme"
+}

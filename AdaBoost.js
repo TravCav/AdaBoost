@@ -1,10 +1,9 @@
-
 /**
  * @param {any} rawTrain is the dataset with the last column having the outcome you're looking for. 
  * @param {any} positiveOutcome is the value in the last column you want to predict for. 
  */
 function AdaBoost(rawTrain, positiveOutcome) {
-	'use strict';	
+	'use strict';
 
 	function Learner(data) {
 		var self = this;
@@ -22,7 +21,7 @@ function AdaBoost(rawTrain, positiveOutcome) {
 	 * @param {any} testData A record without an outcome
 	 * @returns positive number for true, negative number for false
 	 */
-	this.predict = function(testData) {
+	this.predict = function (testData) {
 		// loop through each learner to see if it's needed.
 		// if it is then accumulate the predicted * alpha
 		var accumulatedVote = 0;
@@ -79,7 +78,6 @@ function AdaBoost(rawTrain, positiveOutcome) {
 					}
 				}
 
-
 				if (relevant !== 0 && plusOne !== minusOne) {
 					// which one had more?
 					predicted = (plusOne > minusOne) ? 1 : -1;
@@ -104,7 +102,7 @@ function AdaBoost(rawTrain, positiveOutcome) {
 		var lastColumn = rawTrain[0].length - 1;
 
 		// Initialize starting training weights
-		var startWeight = 1.0 / dataRows; 
+		var startWeight = 1.0 / dataRows;
 		for (i = 0; i < dataRows; i++) {
 			trainWeights[i] = startWeight;
 		}
@@ -174,3 +172,5 @@ function AdaBoost(rawTrain, positiveOutcome) {
 		return learners;
 	}
 }
+
+module.exports = AdaBoost;
