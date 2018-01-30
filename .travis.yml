@@ -6,5 +6,4 @@ ode_js:
   - "lts/*"
 
 install:
-  - "npm install mocha"
   - "npm install"
