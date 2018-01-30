@@ -1,9 +1,7 @@
 language: node_js
 
-ode_js:
+node_js:
   - "node"
-  - "iojs"
-  - "lts/*"
 
 install:
   - "npm install"
