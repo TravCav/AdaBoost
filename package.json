@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/TravCav/AdaBoost/issues"
   },
-  "homepage": "https://github.com/TravCav/AdaBoost#readme"
+  "homepage": "https://github.com/TravCav/AdaBoost#readme",
+  "devDependencies": {
+    "mocha": "^5.0.0"
+  }
 }
