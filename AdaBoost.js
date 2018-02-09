@@ -74,7 +74,11 @@ function AdaBoost(rawTrain, positiveOutcome) {
 				for (var dataRow = 0; dataRow < dataRows; dataRow++) {
 					if (rawTrain[dataRow][featureIndex] === currentValue) {
 						relevant++;
-						(rawTrain[dataRow][dataCols - 1] !== positiveOutcome) ? minusOne++ : plusOne++;
+						if (rawTrain[dataRow][dataCols - 1] !== positiveOutcome) {
+							minusOne++;
+						} else {
+							plusOne++;
+						}
 					}
 				}
 
