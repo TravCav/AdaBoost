@@ -1,5 +1,12 @@
-AdaBoost
-========
+
+[![Build Status](https://travis-ci.org/TravCav/AdaBoost.svg?branch=master
+)](https://travis-ci.org/TravCav/AdaBoost)
+[![npm version](https://badge.fury.io/js/adaboost.svg)](https://badge.fury.io/js/adaboost)
+
+# AdaBoost
+[![Join the chat at https://gitter.im/TravCav/AdaBoost](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/TravCav/AdaBoost?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+
 
 Adaptive Boost Algorithm
 
